@@ -48,3 +48,10 @@ gradle.taskGraph.whenReady {
 			test.enabled = false
 		}
 }*/
+
+gradle.taskGraph.whenReady {
+	taskGraph ->
+		if (taskGraph.hasTask(stage)) {
+			test.enabled = false
+		}
+}
