@@ -32,7 +32,7 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-task stage(dependsOn: ['build', 'clean'])
+/*task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
 
 task copyToLib(type: Copy) {
@@ -47,4 +47,4 @@ gradle.taskGraph.whenReady {
 		if (taskGraph.hasTask(stage)) {
 			test.enabled = false
 		}
-}
+}*/
