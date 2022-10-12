@@ -1,4 +1,4 @@
-package com.weCode.bookStore.dto;
+package com.weCode.bookStore.model;
 
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
@@ -6,25 +6,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
+@Entity
+public class Book {
 
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     private UUID id;
 
+    @Column
+    @NotNull
     private String title;
 
+    @Column
+    @NotNull
     private String description;
 
+    @Column
+    @NotNull
     private int releaseYear;
-
 }
