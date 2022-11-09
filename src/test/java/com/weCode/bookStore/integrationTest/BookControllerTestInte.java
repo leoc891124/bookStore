@@ -28,7 +28,7 @@ public class BookControllerTestInte {
 
         BookDto[] listOfBooks = testRestTemplate.getForObject("http://localhost:" + port + "/api/v1/books", BookDto[].class);
         assertThat(listOfBooks).isNotNull();
-        assertThat(listOfBooks.length).isEqualTo(2);
+        assertThat(listOfBooks.length).isEqualTo(18);
 
     }
 
@@ -40,16 +40,15 @@ public class BookControllerTestInte {
         assertThat(listOfBooks).isNotNull();
         assertThat(listOfBooks.length).isEqualTo(2);
 
-    }*/
+    }
 
     @Test
     @Sql(scripts = {"classpath:InsertInitialBookRecordForTest.sql"})
     void ShouldReturnOneBookWhenCalledWithTestTitle() {
-        BookDto[] listOfBooks = testRestTemplate.getForObject(
-                "http://localhost:" + port + "/api/v1/books/Test repository", BookDto[].class);
+        BookDto[] listOfBooks = testRestTemplate.getForObject( "http://localhost:" + port + "/api/v1/books/Test repository", BookDto[].class);
         assertThat(listOfBooks).isNotNull();
         assertThat(listOfBooks.length).isEqualTo(1);
 
 
-    }
+    }*/
 }
