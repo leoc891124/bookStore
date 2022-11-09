@@ -11,9 +11,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+
+import static org.mockito.ArgumentMatchers.anyString;
 import static org. mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,6 +53,20 @@ public class BookServiceTest {
 
 
 
+    }
+
+    @Test
+    void shouldReturnBooksByBookTitleIgnoreCases(){
+        List<Book> books = new ArrayList<>();
+        Book book = getBook();
+        books.add(book);
+        BookDto bookDto = getBookDto();
+
+        when(bookRepository.findBooksByTitleIgnoreCase(anyString())).thenReturn(books);
+        when (mapper.map(book, BookDto.class)).thenReturn(bookDto);
+        List<BookDto> bookDtoList = bookService.getBooksByTitle("Test title");
+
+        assertThat(bookDtoList.size()).isEqualTo(1);
     }
 
     private Book getBook(){

@@ -38,4 +38,10 @@ public class BookService {
     }
 
 
+    public List<BookDto> getBooksByTitle(String bookTitle) {
+        List<Book> booksByTitleIgnoreCase = bookRepository.findBooksByTitleIgnoreCase(bookTitle);
+        return booksByTitleIgnoreCase.stream()
+                .map(convertBookModelToBookDto())
+                .collect(Collectors.toList());
+    }
 }
