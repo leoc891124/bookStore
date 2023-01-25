@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/auth")
-public class UserController {
+@RequestMapping("api/v1")
+public class AuthController {
     @Autowired
     private final AuthenticationManager authenticationManager;
     @Autowired
@@ -23,13 +23,13 @@ public class UserController {
     @Autowired
     private final JwtUtil jwtUtil;
 
-    public UserController(AuthenticationManager authenticationManager, UserServiceDetail userServiceDetail, JwtUtil jwtUtil) {
+    public AuthController(AuthenticationManager authenticationManager, UserServiceDetail userServiceDetail, JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
         this.userServiceDetail = userServiceDetail;
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
         try{
            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));

@@ -12,14 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UserDetailService implements UserDetailsService {
+public class UserServiceDetail implements UserDetailsService {
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    private AuthenticationRequest request;
 
-    public UserDetailService(PasswordEncoder passwordEncoder) {
+    public UserServiceDetail(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -30,7 +29,8 @@ public class UserDetailService implements UserDetailsService {
         //System.out.println(passwordEncoder.encode("password123"));
         //request.setEmail("peter@gmail.com");
         //request.setPassword(passwordEncoder.encode("password123"));
-        return new User("peter@gmail.com",passwordEncoder.encode("password123"), new ArrayList<>());
+        User user = new User("peter@gmail.com",passwordEncoder.encode("password123"), new ArrayList<>());
+        return user;
 
 
     }
