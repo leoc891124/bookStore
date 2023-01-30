@@ -34,7 +34,6 @@ public class Usuario implements UserDetails {
     private String username;
 
     @Column
-    @NotNull
     private String password;
 
 
