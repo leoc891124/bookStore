@@ -46,23 +46,24 @@ public class SecurityConifg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests().antMatchers("/").permitAll().and()
-                .authorizeRequests().antMatchers("/console/**","/api/v1/**").permitAll();
-        httpSecurity.csrf().disable();
-        httpSecurity.headers().frameOptions().disable()
-                .and();
+        //httpSecurity.authorizeRequests().antMatchers("/console/**","/api/v1/**").permitAll();
+        httpSecurity.csrf().disable().cors().disable()
+                .headers().frameOptions().disable();
+
 
         httpSecurity = httpSecurity.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and();
+        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity = httpSecurity.exceptionHandling()
                 .authenticationEntryPoint((request, response, ex)->{
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
                         }).and();
         httpSecurity.authorizeRequests()
+                .antMatchers("/api/v1/**").permitAll()
                   .anyRequest().authenticated();
 
-        httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
     }
 
 }

@@ -20,7 +20,7 @@ public class Authority implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long authid;
 
     @Column
     @NotNull
@@ -28,7 +28,7 @@ public class Authority implements GrantedAuthority {
 
 
     @ManyToOne(optional = false)
-    private Usuario user;
+    private Usuario usuario;
 
     public Authority(String authority) {
         this.authority = authority;

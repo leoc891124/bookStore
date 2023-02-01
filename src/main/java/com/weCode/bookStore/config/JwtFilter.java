@@ -19,7 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.io.IOException;
-
+import java.util.Arrays;
+import java.util.List;
 
 
 @Component
@@ -38,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // Get authorization header and validate
-        final String header = request.getHeader (HttpHeaders.AUTHORIZATION);
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.hasText(header) || (StringUtils.hasText(header) && !header.startsWith("Bearer "))){
             chain.doFilter(request, response);
             return;
@@ -59,12 +60,14 @@ public class JwtFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken
             authentication  = new UsernamePasswordAuthenticationToken(
                     userDetails, null,
-                     userDetails.getAuthorities()
+                     userDetails == null ?
+                             Arrays.asList() : userDetails.getAuthorities()
         );
 
     authentication.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
     );
+
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

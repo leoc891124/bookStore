@@ -14,10 +14,13 @@ spring:
         ddl-auto: validate
     flyway:
       migration: db/migration
-security:
-  basic:
-    enabled: true
-    authorize-mode: NONE
+
+    security:
+      filter:
+        order: 10
+      basic:
+        enabled: true
+        authorize-mode: NONE
 auth:
   jwt:
     issuer: "BookStore"

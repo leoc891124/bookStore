@@ -1,12 +1,16 @@
 package com.weCode.bookStore.integrationTest;
 
 import com.weCode.bookStore.BookStoreApplication;
+import com.weCode.bookStore.config.PasswordConfig;
 import com.weCode.bookStore.dto.BookDto;
+import com.weCode.bookStore.model.Usuario;
+import com.weCode.bookStore.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -22,10 +26,27 @@ public class BookControllerTestInte {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private PasswordConfig passwordEncoder;
+
+    void SetUpHeader(){
+
+        Usuario user = new Usuario();
+        user.setUsername("leoc@gmail.com");
+        user.setPassword(passwordEncoder.getPasswordEncoder().encode("password123"));
+        user.setId(1L);
+
+        jwtUtil.generateToken(user);
+
+    }
+
     @Test
     @Sql(scripts = {"classpath:InsertInitialBookRecordForTest.sql"})
     void shouldReturnBooksWhenBookApiCalled() {
-
+        SetUpHeader();
         BookDto[] listOfBooks = testRestTemplate.getForObject("http://localhost:" + port + "/api/v1/books", BookDto[].class);
         assertThat(listOfBooks).isNotNull();
         assertThat(listOfBooks.length).isEqualTo(18);

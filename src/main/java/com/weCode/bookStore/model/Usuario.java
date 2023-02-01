@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -25,9 +26,9 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
     @NotNull
-    private LocalDate startDate;
+    @Column
+    private Date actualdate;
 
     @Column
     @NotNull
@@ -35,6 +36,8 @@ public class Usuario implements UserDetails {
 
     @Column
     private String password;
+
+
 
 
     @Override

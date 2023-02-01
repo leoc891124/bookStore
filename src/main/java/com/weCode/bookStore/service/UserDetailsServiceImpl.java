@@ -22,14 +22,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = new Usuario();
+        /*Usuario user = new Usuario();
         user.setUsername("leoc@gmail.com");
         user.setPassword(passwordEncoder.getPasswordEncoder().encode("password123"));
         user.setId(1L);
-        return user;
-       /* Optional<Usuario> user = usuarioRepository.findByUsername(username);
+        return user;*/
+        Optional<Usuario> user = usuarioRepository.findByUsername(username);
 
-        return user.orElseThrow(()-> new UsernameNotFoundException("invalid credencials"));*/
+        return user.orElseThrow(()-> new UsernameNotFoundException("invalid credencials"));
 
     }
 }
