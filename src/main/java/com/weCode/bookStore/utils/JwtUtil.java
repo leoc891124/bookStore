@@ -1,12 +1,15 @@
 package com.weCode.bookStore.utils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +22,7 @@ public class JwtUtil implements Serializable {
 
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long JWT_TOKEN_VALIDITY = 30 * 24 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = 30 * 60 * 2;
 
     @Value("${jwt:secret}")
     private String secret;
@@ -64,12 +67,26 @@ public class JwtUtil implements Serializable {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+                .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     //validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
+   /* public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }*/
+
+    public Authentication validateToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+
+        if(claims.getExpiration().before(new Date())){
+            return null;
+        }
+
+        String username = claims.getSubject();
+
+        return new UsernamePasswordAuthenticationToken(
+                username, null, new ArrayList<>()
+        );
     }
 }

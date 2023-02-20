@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(classes = BookStoreApplication.class,
@@ -39,7 +41,17 @@ public class BookControllerTestInte {
         user.setPassword(passwordEncoder.getPasswordEncoder().encode("password123"));
         user.setId(1L);
 
-        jwtUtil.generateToken(user);
+        String token = jwtUtil.generateToken(user);
+
+        testRestTemplate.getRestTemplate().setInterceptors(
+                Collections.singletonList(((request, body, execution) -> {
+                   request.getHeaders()
+                           .add("Authorization", "Bearer " + token);
+                   return execution.execute(request, body);
+                }))
+        );
+
+
 
     }
 

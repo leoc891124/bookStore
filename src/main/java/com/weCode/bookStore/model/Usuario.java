@@ -10,10 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Builder
@@ -22,9 +19,13 @@ import java.util.List;
 @Entity
 public class Usuario implements UserDetails {
 
-    @Id
+    /*@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long id;*/
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
+    private UUID id;
 
     @NotNull
     @Column
