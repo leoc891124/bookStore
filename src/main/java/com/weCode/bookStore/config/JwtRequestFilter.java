@@ -1,5 +1,8 @@
 package com.weCode.bookStore.config;
 
+import com.weCode.bookStore.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,17 +17,18 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
 
-    public JwtRequestFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String tokenWithBearer = request.getHeader("Authorization");
 
-        if (tokenWithBearer == null || !tokenWithBearer.startsWith("Bearer")){
+        if(tokenWithBearer ==null || !tokenWithBearer.startsWith("Bearer")){
+
             filterChain.doFilter(request,response);
             return;
         }
@@ -36,5 +40,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
+
     }
 }

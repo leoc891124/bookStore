@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 //@CrossOrigin
-@RequestMapping("api/v1/books")
+@RequestMapping("api/v1")
 public class BookController {
 
     @Autowired
@@ -30,13 +30,13 @@ public class BookController {
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content) })
-    @GetMapping
+    @GetMapping("/books")
     public ResponseEntity<List<BookDto>> getBooks(){
         List<BookDto> books = bookService.getBooks();
             return ResponseEntity.ok(books);
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/books/{title}")
     public ResponseEntity<List<BookDto>> getBooksByTitle(@PathVariable("title") String title) {
         List<BookDto> booksByTitle = bookService.getBooksByTitle(title);
         return ResponseEntity.ok(booksByTitle);

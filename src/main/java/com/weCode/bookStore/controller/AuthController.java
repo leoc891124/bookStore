@@ -1,47 +1,80 @@
 package com.weCode.bookStore.controller;
 
+
 import com.weCode.bookStore.config.JwtUtil;
 import com.weCode.bookStore.dto.AuthenticationRequest;
 import com.weCode.bookStore.dto.AuthenticationResponse;
 import com.weCode.bookStore.service.UserServiceDetail;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.weCode.bookStore.dto.AuthCredentialsRequest;
+import com.weCode.bookStore.dto.AuthenticationResponse;
+import com.weCode.bookStore.model.Usuario;
+import com.weCode.bookStore.repository.UsuarioRepository;
+import com.weCode.bookStore.service.UserDetailsServiceImpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/v1")
 public class AuthController {
-    @Autowired
-    private final AuthenticationManager authenticationManager;
-    @Autowired
-    private final UserServiceDetail userServiceDetail;
-    @Autowired
-    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthenticationManager authenticationManager, UserServiceDetail userServiceDetail, JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.userServiceDetail = userServiceDetail;
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    @PostMapping("login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
-        try{
-           authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthCredentialsRequest request){
+        try {
+            Authentication authenticate = authenticationManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getUsername(), request.getPassword()
+                            )
+                    );
+
+           /* Usuario user = (Usuario) authenticate.getPrincipal();
+            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+            String token = jwtUtil.generateToken(userDetails);
+            return ResponseEntity.ok(new AuthenticationResponse("Bearer "+token));
+                   /* .header(
+                            HttpHeaders.AUTHORIZATION,
+                            token
+                    );
+
+
 
         } catch (BadCredentialsException ex){
-            throw new RuntimeException("Username or password is incorrect");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();*/
         }
 
-        UserDetails userDetails = userServiceDetail.loadUserByUsername(request.getEmail());
-        String token = jwtUtil.generateToken(userDetails);
 
-        System.out.println("toke "+token);
+        catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            //throw new RuntimeException("username or password incorrect");
+        }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        String token = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse("Bearer "+token));
 
