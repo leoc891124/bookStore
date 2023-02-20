@@ -1,20 +1,13 @@
 package com.weCode.bookStore.controller;
 
 
-import com.weCode.bookStore.config.JwtUtil;
-import com.weCode.bookStore.dto.AuthenticationRequest;
 import com.weCode.bookStore.dto.AuthenticationResponse;
-import com.weCode.bookStore.service.UserServiceDetail;
+import com.weCode.bookStore.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.weCode.bookStore.dto.AuthCredentialsRequest;
-import com.weCode.bookStore.dto.AuthenticationResponse;
-import com.weCode.bookStore.model.Usuario;
-import com.weCode.bookStore.repository.UsuarioRepository;
 import com.weCode.bookStore.service.UserDetailsServiceImpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
