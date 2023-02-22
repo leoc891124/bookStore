@@ -2,6 +2,10 @@ package com.weCode.bookStore.controller;
 
 
 import com.weCode.bookStore.dto.AuthenticationResponse;
+import com.weCode.bookStore.dto.UserDto;
+import com.weCode.bookStore.model.Usuario;
+import com.weCode.bookStore.repository.UsuarioRepository;
+import com.weCode.bookStore.service.UserService;
 import com.weCode.bookStore.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +23,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.UUID;
+
 //@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("api/v1")
@@ -33,6 +40,13 @@ public class AuthController {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    /*@Autowired
+    UsuarioRepository usuarioRepository;*/
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
 
     @PostMapping("/login")
@@ -70,6 +84,14 @@ public class AuthController {
         String token = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse("Bearer "+token));
+
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UUID> addUser(@Valid @RequestBody UserDto userDto){
+        UUID uuid = userService.addUser(userDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(uuid);
 
     }
 }

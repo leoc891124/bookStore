@@ -78,6 +78,7 @@ public class SecurityConifg extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests().antMatchers("/api/v1/login").permitAll()
+                .antMatchers("/api/v1/register").permitAll()
                 .anyRequest().authenticated();
 
 
