@@ -6,6 +6,7 @@ import com.weCode.bookStore.model.Usuario;
 import com.weCode.bookStore.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -20,16 +21,26 @@ public class UserService {
     private PasswordConfig passwordConfig;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     public UUID addUser(UserDto userDto){
         Usuario user = modelMapper.map(userDto, Usuario.class);
 
-        user.setPassword(passwordConfig.getPasswordEncoder().encode(userDto.getPassword()));
+        //user.setPassword(passwordConfig.getPasswordEncoder().encode(userDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setId(null);
 
         Usuario createdUser = usuarioRepository.save(user);
 
+
         return createdUser.getId();
+    }
+
+    public UserDto getUserByUsername(String username){
+        return new UserDto();
     }
 
 

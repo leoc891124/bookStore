@@ -27,7 +27,7 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "UUID")
     private UUID id;
 
-    @NotNull
+
     @Column
     private Date actualdate;
 

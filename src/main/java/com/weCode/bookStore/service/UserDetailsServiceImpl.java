@@ -27,9 +27,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.getPasswordEncoder().encode("password123"));
         user.setId(1L);
         return user;*/
+        //Usuario user = usuarioRepository.findByUsername(username);
         Optional<Usuario> user = usuarioRepository.findByUsername(username);
 
         return user.orElseThrow(()-> new UsernameNotFoundException("invalid credencials"));
+
+        //return user;
 
     }
 }
