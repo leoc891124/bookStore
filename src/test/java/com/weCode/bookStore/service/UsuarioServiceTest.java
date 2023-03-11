@@ -13,10 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +49,20 @@ public class UsuarioServiceTest {
 
     }
 
+    @Test
+    public void shouldReturnUserWhenEmailExist(){
+        UUID id = UUID.randomUUID();
+        when(usuarioRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(getUser(id)));
+        when(modelMapper.map(any(), any())).thenReturn(getUserDto());
+
+        UserDto username = userService.getUserByUsername("email");
+
+
+        assertThat(username).isNotNull();
+        assertThat(username.getUsername()).isEqualTo("test@gmail.com");
+
+    }
+
     private UserDto getUserDto() {
         return UserDto.builder()
                 .password("password")
@@ -59,7 +75,7 @@ public class UsuarioServiceTest {
         return Usuario.builder()
                 .password("password")
                 .id(uuid)
-                .username("test@gmail.com")
+                .username("test2@gmail.com")
                 .build();
     }
 

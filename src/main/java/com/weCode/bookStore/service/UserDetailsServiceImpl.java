@@ -1,6 +1,7 @@
 package com.weCode.bookStore.service;
 
 import com.weCode.bookStore.config.PasswordConfig;
+import com.weCode.bookStore.dto.UserDto;
 import com.weCode.bookStore.model.Usuario;
 import com.weCode.bookStore.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordConfig passwordEncoder;
 
-    @Autowired
+   @Autowired
     private UsuarioRepository usuarioRepository;
+
+    /*@Autowired
+    private UserService userService;*/
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -28,10 +32,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         user.setId(1L);
         return user;*/
         //Usuario user = usuarioRepository.findByUsername(username);
-        Optional<Usuario> user = usuarioRepository.findByUsername(username);
+       Optional<Usuario> user = usuarioRepository.findByUsername(username);
 
-        return user.orElseThrow(()-> new UsernameNotFoundException("invalid credencials"));
+       return user.orElseThrow(()-> new UsernameNotFoundException("invalid credencials"));
+        /*Optional<UserDto> user = Optional.ofNullable(userService.getUserByUsername(username));
 
+        return user.orElseThrow(()-> new UsernameNotFoundException("invalid credencials"));*/
         //return user;
 
     }
